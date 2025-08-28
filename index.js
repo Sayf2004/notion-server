@@ -33,7 +33,7 @@ app.get('/api/getNotes', async (req, res) => {
     const data = response.results.map(page => ({
       id: page.id,
       title: page.properties?.title?.title?.[0]?.plain_text || 'Untitled',
-      description: page.properties?.desc?.rich_text?.[0]?.plain_text || '',
+      description: page.properties?.desc?.rich_text?.map(block => block.plain_text).join('') || '',
       event_date: page.properties?.event_date?.date?.start || '',
       location: page.properties?.location?.rich_text?.[0]?.plain_text || '',
       city: page.properties?.city?.select?.name || '',
@@ -41,7 +41,7 @@ app.get('/api/getNotes', async (req, res) => {
       poster: page.properties?.poster?.files?.[0]?.file?.url || '',
       images: page.properties?.img?.files?.map(file => file?.file?.url) || [],
       sign_up: page.properties?.sign_up?.rich_text?.[0]?.plain_text || '',
-      detail: page.properties?.detail?.rich_text?.[0]?.plain_text || '',
+      detail: page.properties?.detail?.rich_text?.map(block => block.plain_text).join('') || '',
     }));
 
     cache = data;
